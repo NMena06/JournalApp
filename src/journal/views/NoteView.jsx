@@ -5,6 +5,7 @@ import { DeleteOutline, SaveOutlined, UploadOutlined } from '@mui/icons-material
 import { Button, Grid, IconButton, TextField, Typography } from '@mui/material';
 import Swal from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.css';
+import { format } from 'date-fns';
 
 import { useForm } from '../../hooks/useForm';
 import { ImageGallery } from '../components'
@@ -19,8 +20,11 @@ export const NoteView = () => {
     const { body, title, date, onInputChange, formState } = useForm( note );
 
     const dateString = useMemo(() => {
-        const newDate = new Date( date );
-        return newDate.toUTCString();
+        const newDate = new Date(date);
+        // Obtener la hora local y restarle 3 horas para ajustarla a la hora de Argentina
+        const adjustedDate = new Date(newDate.getTime() - (3 * 60 * 60 * 1000));
+        // Formatear la fecha como dd/mm/yyyy
+        return format(adjustedDate, 'dd/MM/yyyy HH:mm:ss');
     }, [date])
 
     const fileInputRef = useRef();
@@ -34,8 +38,6 @@ export const NoteView = () => {
           Swal.fire('Nota actualizada', messageSaved, 'success');
       }
     }, [messageSaved])
-    
-    
 
     const onSaveNote = () => {
         dispatch( startSaveNote() );
@@ -49,7 +51,6 @@ export const NoteView = () => {
     const onDelete = () => {
         dispatch( startDeletingNote() );
     }
-
 
     return (
         <Grid 
@@ -128,7 +129,6 @@ export const NoteView = () => {
                     Borrar
                 </Button>
             </Grid>
-
 
             {/* Image gallery */}
             <ImageGallery images={ note.imageUrls } />
