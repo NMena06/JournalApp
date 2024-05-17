@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 import { useDispatch } from 'react-redux';
 import { setActiveNote, startDeletingNote, startSaveNote, startUploadingFiles } from '../../store/journal';
 import { ImageGallery } from '../components';
+import { StarOutline } from '@mui/icons-material';
 
 export const NothingSelectedView = () => {
   const dispatch = useDispatch();
@@ -54,7 +55,7 @@ export const NothingSelectedView = () => {
               key={id}
             >
               <Grid item>
-                <Typography fontSize={39} fontWeight="light">
+                <Typography fontSize={20} fontWeight="light">
                   {dateString}
                 </Typography>
                 {/* <IconButton

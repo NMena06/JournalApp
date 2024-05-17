@@ -73,7 +73,7 @@ export const NoteView = () => {
       className="animate__animated animate__fadeIn animate__faster"
     >
       <Grid item>
-        <Typography fontSize={39} fontWeight="light">
+        <Typography fontSize={20} fontWeight="light">
           {dateString}
         </Typography>
         <IconButton
