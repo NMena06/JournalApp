@@ -63,17 +63,6 @@ export const NoteView = () => {
         >
             <Grid item>
                 <Typography fontSize={ 39 } fontWeight='light' >{ dateString }</Typography>
-            </Grid>
-            <Grid item>
-
-                <input 
-                    type="file"
-                    multiple
-                    ref={ fileInputRef }
-                    onChange={ onFileInputChange }
-                    style={{ display: 'none' }}
-                />
-
                 <IconButton
                     color="primary"
                     disabled={ isSaving }
@@ -92,7 +81,9 @@ export const NoteView = () => {
                     Guardar
                 </Button>
             </Grid>
-
+            
+            {/* Image gallery */}
+            
             <Grid container>
                 <TextField 
                     type="text"
@@ -106,6 +97,24 @@ export const NoteView = () => {
                     onChange={ onInputChange }
                 />
 
+            </Grid>
+            <ImageGallery images={ note.imageUrls } />
+            <Grid item>
+
+                <input 
+                    type="file"
+                    multiple
+                    ref={ fileInputRef }
+                    onChange={ onFileInputChange }
+                    style={{ display: 'none' }}
+                />
+
+                
+            </Grid>
+
+
+
+            <Grid container>
                 <TextField 
                     type="text"
                     variant="filled"
@@ -130,8 +139,7 @@ export const NoteView = () => {
                 </Button>
             </Grid>
 
-            {/* Image gallery */}
-            <ImageGallery images={ note.imageUrls } />
+            
 
         </Grid>
     )
