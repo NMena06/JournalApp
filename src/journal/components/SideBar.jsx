@@ -8,6 +8,9 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
     const { displayName } = useSelector(state => state.auth);
     const { notes } = useSelector(state => state.journal);
 
+    // Ordenar las notas por fecha en orden descendente
+    const sortedNotes = [...notes].sort((a, b) => new Date(b.date) - new Date(a.date));
+
     const drawer = (
         <>
             <Toolbar>
@@ -17,7 +20,7 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
             </Toolbar>
             <Divider />
             <List>
-                {notes.map(note => (
+                {sortedNotes.map(note => (
                     <SideBarItem key={note.id} {...note} />
                 ))}
             </List>
@@ -51,5 +54,5 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
                 {drawer}
             </Drawer>
         </Box>
-    )
-}
+    );
+};
