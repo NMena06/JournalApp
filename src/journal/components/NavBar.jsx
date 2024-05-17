@@ -13,9 +13,9 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
         dispatch(startLogout());
     }
 
-    const goToProfile = () => {
-        navigate('/profile');
-    }
+    // const goToProfile = () => {
+    //     navigate('/profile');
+    // }
 
     return (
         <AppBar 
@@ -39,7 +39,7 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
                     <Typography variant='h6' noWrap component='div'> SeguSocial </Typography>
 
                     <Grid item>
-                        <IconButton onClick={goToProfile} sx={{ p: 0 }}>
+                        <IconButton /*onClick={goToProfile}*/ sx={{ p: 0 }}>
                             <Avatar alt={displayName} src={photoURL} />
                         </IconButton>
 
