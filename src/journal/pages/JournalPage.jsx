@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { AppBar, Toolbar, IconButton, Button } from '@mui/material';
-import { AccountBoxOutlined, AccountBoxRounded, AddBoxOutlined, AddBoxRounded, ExitToAppRounded, HomeRounded, LogoutOutlined } from '@mui/icons-material';
+import { AccountBoxRounded, AddBoxRounded, ExitToAppRounded, HomeRounded } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
 
 import { JournalLayout } from '../layout/JournalLayout';
@@ -20,6 +20,10 @@ export const JournalPage = () => {
     dispatch(startLogout());
   };
 
+  const reloadPage = () => {
+    window.location.reload();
+  };
+
   return (
     <JournalLayout>
       {active ? <NoteView /> : <NothingSelectedView />}
@@ -35,19 +39,19 @@ export const JournalPage = () => {
         }}
       >
         <Toolbar sx={{ justifyContent: 'space-between' }}>
-          {/* Profile Button */}
-          
+          {/* Home Button */}
           <IconButton
             size='small'
             sx={{
               color: 'white',
               ':hover': { backgroundColor: 'rgba(255, 255, 255, 0.2)' },
             }}
+            onClick={reloadPage}  // Add onClick handler to reload the page
           >
-            <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
-              <HomeRounded sx={{ fontSize: 24 }} />
-            </Link>
+            <HomeRounded sx={{ fontSize: 24 }} />
           </IconButton>
+
+          {/* Profile Button */}
           <IconButton
             size='small'
             sx={{
@@ -74,8 +78,7 @@ export const JournalPage = () => {
           </IconButton>
 
           {/* Logout Button */}
-
-            <IconButton
+          <IconButton
             onClick={onLogout}
             size='small'
             disabled={isSaving}
@@ -86,8 +89,6 @@ export const JournalPage = () => {
           >
             <ExitToAppRounded sx={{ fontSize: 24 }} />
           </IconButton>
-  
-      
         </Toolbar>
       </AppBar>
     </JournalLayout>

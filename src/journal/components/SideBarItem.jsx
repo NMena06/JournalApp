@@ -36,9 +36,9 @@ export const SideBarItem = ({ title = '', body, id, date, imageUrls = [] }) => {
                             secondary={<Typography variant="body2" color="text.secondary">{formattedDate}</Typography>}
                         />
                     </Grid>
-                    <Grid item xs={3} md={2} textAlign="right">
+                    {/* <Grid item xs={3} md={2} textAlign="right">
                         <Typography variant="caption">{body}</Typography>
-                    </Grid>
+                    </Grid> */}
                 </Grid>
             </ListItemButton>
         </ListItem>

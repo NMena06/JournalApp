@@ -179,3 +179,8 @@ export const  addCommentToNote = (state, action) => {
         return note;
     });
 }
+export const updateProfilePhoto = async (userId, photoURL) => {
+    const userDocRef = doc(FirebaseDB, 'users', userId);
+    await updateDoc(userDocRef, { photoURL });
+};
+

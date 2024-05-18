@@ -107,6 +107,7 @@ export const NoteView = () => {
           sx={{ border: "none", mb: 1 }}
           name="title"
           value={title}
+          disabled={isSaving}
           onChange={onInputChange}
         />
       </Grid>
@@ -131,6 +132,7 @@ export const NoteView = () => {
           minRows={4}
           name="body"
           value={body}
+          disabled={isSaving}
           onChange={onInputChange}
         />
       </Grid>
