@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import { Grid, Typography, TextField } from '@mui/material';
+import { Grid, Typography, TextField, Avatar } from '@mui/material';
 import { format } from 'date-fns';
 import { StarOutline } from '@mui/icons-material';
 import { setActiveNote, startDeletingNote, startSaveNote, startUploadingFiles } from '../../store/journal';
@@ -8,6 +8,7 @@ import { ImageGallery } from '../components';
 export const NothingSelectedView = () => {
   const dispatch = useDispatch();
   const { notes } = useSelector(state => state.journal);
+  const { photoURL, displayName } = useSelector(state => state.auth); // Acceder a photoURL y displayName desde auth
 
   // Ordenar las notas por fecha en orden descendente
   const sortedNotes = [...notes].sort((a, b) => new Date(b.date) - new Date(a.date));
@@ -27,7 +28,7 @@ export const NothingSelectedView = () => {
           Inicio
         </Typography>
       </Grid>
-      
+
       {sortedNotes.length > 0 ? (
         sortedNotes.map(note => {
           const { id, title, body, date, imageUrls } = note;
@@ -58,25 +59,34 @@ export const NothingSelectedView = () => {
               sx={{ mb: 1, backgroundColor: 'white', borderRadius: 2, padding: 2, width: '100%' }}
               key={id}
             >
+
               <Grid item>
-                <Typography fontSize={20} fontWeight="light">
-                  {dateString}
+                <Typography variant='h9' fontWeight="light">
+                  {displayName}
                 </Typography>
+
+              </Grid>
+
+              <Grid item sx={{ mr: 2 }}>
+
+                <Avatar alt={displayName} src={photoURL} />
+
               </Grid>
 
               <Grid container>
                 <TextField
                   type="text"
-                  variant="filled"
+                  variant='standard'
                   fullWidth
                   placeholder="Ingrese un título"
-                  label="Título"
                   sx={{ border: "none", mb: 1 }}
                   name="title"
                   value={title}
                   disabled
                 />
               </Grid>
+
+
               <ImageGallery images={imageUrls} />
               <Grid item>
                 <input
@@ -86,20 +96,30 @@ export const NothingSelectedView = () => {
                   onChange={handleFileInputChange}
                   style={{ display: "none" }}
                 />
+                <Grid item>
+                  <Typography fontSize={12} fontWeight="light" sx={{ marginTop: '-10px' }}>
+                    {dateString}
+                  </Typography>
+                </Grid>
               </Grid>
 
               <Grid container>
+                <Typography variant='h9' noWrap component='div' sx={{ textAlign: 'left', marginTop: '10px' }}>
+                  Comentarios
+                </Typography>
+
                 <TextField
                   type="text"
                   variant="filled"
                   fullWidth
                   multiline
-                  placeholder="¿Qué sucedió en el día de hoy?"
-                  minRows={5}
+                  placeholder="Agrega un comentario"
+                  minRows={2}
                   name="body"
                   value={body}
                   disabled
                 />
+
               </Grid>
 
               <Grid container justifyContent="end">
@@ -117,7 +137,7 @@ export const NothingSelectedView = () => {
             <StarOutline sx={{ fontSize: 100, color: 'white' }} />
           </Grid>
           <Grid item xs={12}>
-            <Typography color="white" variant='h5'>Selecciona o crea una entrada</Typography>
+            <Typography color="white" variant='h5'>Selecciona o crea una nuevo post</Typography>
           </Grid>
         </>
       )}

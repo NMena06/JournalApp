@@ -127,8 +127,8 @@ export const NoteView = () => {
           variant="filled"
           fullWidth
           multiline
-          placeholder="¿Qué sucedió en el día de hoy?"
-          minRows={5}
+          placeholder="Agrega un comentario"
+          minRows={4}
           name="body"
           value={body}
           onChange={onInputChange}

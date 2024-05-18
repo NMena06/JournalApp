@@ -12,7 +12,7 @@ export const AuthLayout = ({ children, title = '' }) => {
       sx={{ minHeight: '100vh', backgroundColor: 'primary.main', padding: 4 }}
     >
       <Grid item xs={12} container justifyContent="center" sx={{ mb: 2 }}>
-        <img src={cherryLogo} alt="Cherry Logo" style={{ height: 100 }} />
+        <img src={cherryLogo} alt="Cherry Logo" style={{ height: 100, marginBottom: '16px' }} />
       </Grid>
 
       <Grid 

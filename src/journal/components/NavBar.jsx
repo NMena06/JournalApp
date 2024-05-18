@@ -45,9 +45,10 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
                     </IconButton>
 
                     <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                        {/* <Typography variant='h6' noWrap component='div'> SeguSocial </Typography> */}
                         <Grid item>
-                            <img src={cherryLogo} alt="Cherry Logo" style={{ height: 40, marginRight: 10 }} />
+                            <Link to="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+                                <img src={cherryLogo} alt="Cherry Logo" style={{ height: 40, marginRight: 10 }} />
+                            </Link>
                         </Grid>
                         
                         <Grid item>
@@ -70,8 +71,7 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
             <Dialog open={openDialog} onClose={closeProfileDialog}>
                 <DialogTitle>{displayName}</DialogTitle>
                 <DialogContent>
-                <Link to="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>Ir a perfil</Link>
-
+                    <Link to="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>Ir a perfil</Link>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={closeProfileDialog}>Cerrar</Button>
@@ -80,6 +80,3 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
         </>
     );
 };
-
-
-
