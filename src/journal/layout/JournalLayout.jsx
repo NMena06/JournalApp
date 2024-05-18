@@ -12,18 +12,23 @@ export const JournalLayout = ({ children }) => {
     };
 
     return (
-        <Box sx={{ display: 'flex' }} className='animate__animated animate__fadeIn animate__faster'>
+        <Box sx={{ display: 'flex', width: '100%' }} className='animate__animated animate__fadeIn animate__faster'>
             <NavBar drawerWidth={drawerWidth} handleDrawerToggle={handleDrawerToggle} />
-
             <SideBar drawerWidth={drawerWidth} mobileOpen={mobileOpen} handleDrawerToggle={handleDrawerToggle} />
 
             <Box 
                 component='main'
-                sx={{ flexGrow: 1, p: 3 }}
+                sx={{ 
+                    flexGrow: 1, 
+                    p: 3, 
+                    display: 'flex', 
+                    justifyContent: 'center' 
+                }}
             >
-                <Toolbar />
-
-                {children}
+                <Box sx={{ width: '90%', maxWidth: '1200px' }}>
+                    <Toolbar />
+                    {children}
+                </Box>
             </Box>
         </Box>
     );

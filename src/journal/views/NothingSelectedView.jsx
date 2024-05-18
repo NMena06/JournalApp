@@ -1,11 +1,9 @@
-import { useSelector } from 'react-redux';
-import { Grid, Typography, TextField, Button, IconButton } from '@mui/material';
-import { UploadOutlined, SaveOutlined, DeleteOutline } from '@mui/icons-material';
+import { useSelector, useDispatch } from 'react-redux';
+import { Grid, Typography, TextField } from '@mui/material';
 import { format } from 'date-fns';
-import { useDispatch } from 'react-redux';
+import { StarOutline } from '@mui/icons-material';
 import { setActiveNote, startDeletingNote, startSaveNote, startUploadingFiles } from '../../store/journal';
 import { ImageGallery } from '../components';
-import { StarOutline } from '@mui/icons-material';
 
 export const NothingSelectedView = () => {
   const dispatch = useDispatch();
@@ -24,6 +22,12 @@ export const NothingSelectedView = () => {
       justifyContent="flex-start"
       sx={{ minHeight: 'calc(100vh - 110px)', backgroundColor: 'primary.main', borderRadius: 3, padding: 2 }}
     >
+      <Grid item xs={12} sx={{ mb: 2, width: '100%' }}>
+        <Typography variant='h6' noWrap component='div' sx={{ color: 'white', textAlign: 'left' }}>
+          Inicio
+        </Typography>
+      </Grid>
+      
       {sortedNotes.length > 0 ? (
         sortedNotes.map(note => {
           const { id, title, body, date, imageUrls } = note;
@@ -58,21 +62,6 @@ export const NothingSelectedView = () => {
                 <Typography fontSize={20} fontWeight="light">
                   {dateString}
                 </Typography>
-                {/* <IconButton
-                  color="primary"
-                  onClick={() => document.getElementById(`fileInput-${id}`).click()}
-                >
-                  <UploadOutlined />
-                </IconButton>
-
-                <Button
-                  onClick={handleSaveNote}
-                  color="primary"
-                  sx={{ padding: 2 }}
-                >
-                  <SaveOutlined sx={{ fontSize: 30, mr: 1 }} />
-                  Guardar
-                </Button> */}
               </Grid>
 
               <Grid container>

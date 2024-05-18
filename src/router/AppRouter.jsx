@@ -3,6 +3,8 @@ import { AuthRoutes } from '../auth/routes/AuthRoutes';
 import { JournalRoutes } from '../journal/routes/JournalRoutes';
 import { CheckingAuth } from '../ui/';
 import { useCheckAuth } from '../hooks';
+import ProfileView from '../journal/components/ProfileView';
+
 
 export const AppRouter = () => {
   const status = useCheckAuth();
@@ -19,6 +21,7 @@ export const AppRouter = () => {
           : <Route path="/auth/*" element={<AuthRoutes />} />
       }
 
+      <Route path="/profile" element={<ProfileView />}  />
       <Route path='/*' element={<Navigate to='/auth/login' />} />
     </Routes>
   )

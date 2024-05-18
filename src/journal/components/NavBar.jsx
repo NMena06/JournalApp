@@ -1,57 +1,85 @@
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { AppBar, Grid, IconButton, Toolbar, Typography, Avatar } from '@mui/material';
+import { AppBar, Grid, IconButton, Toolbar, Typography, Avatar, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { LogoutOutlined, MenuOutlined } from '@mui/icons-material';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { startLogout } from '../../store/auth';
+import cherryLogo from '../../../public/cherry-logo.png'; // Asegúrate de que la ruta es correcta
 
 export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { photoURL, displayName } = useSelector(state => state.auth);
+    
+    const [openDialog, setOpenDialog] = useState(false);
+
+    const openProfileDialog = () => {
+        setOpenDialog(true);
+    };
+
+    const closeProfileDialog = () => {
+        setOpenDialog(false);
+    };
 
     const onLogout = () => {
         dispatch(startLogout());
-    }
-
-    // const goToProfile = () => {
-    //     navigate('/profile');
-    // }
+    };
 
     return (
-        <AppBar 
-            position='fixed'
-            sx={{ 
-                width: { sm: `calc(100% - ${ drawerWidth }px)` },
-                ml: { sm: `${ drawerWidth }px` }
-            }}
-        >
-            <Toolbar>
-                <IconButton
-                    color='inherit'
-                    edge="start"
-                    onClick={handleDrawerToggle}
-                    sx={{ mr: 2, display: { sm: 'none' } }}
-                >
-                    <MenuOutlined />
-                </IconButton>
+        <>
+            <AppBar 
+                position='fixed'
+                sx={{ 
+                    width: { sm: `calc(100% - ${ drawerWidth }px)` },
+                    ml: { sm: `${ drawerWidth }px` }
+                }}
+            >
+                <Toolbar>
+                    <IconButton
+                        color='inherit'
+                        edge="start"
+                        onClick={handleDrawerToggle}
+                        sx={{ mr: 2, display: { sm: 'none' } }}
+                    >
+                        <MenuOutlined />
+                    </IconButton>
 
-                <Grid container direction='row' justifyContent='space-between' alignItems='center'>
-                    <Typography variant='h6' noWrap component='div'> SeguSocial </Typography>
+                    <Grid container direction='row' justifyContent='space-between' alignItems='center'>
+                        {/* <Typography variant='h6' noWrap component='div'> SeguSocial </Typography> */}
+                        <Grid item>
+                            <img src={cherryLogo} alt="Cherry Logo" style={{ height: 40, marginRight: 10 }} />
+                        </Grid>
+                        
+                        <Grid item>
+                            <IconButton sx={{ p: 0 }} onClick={openProfileDialog}>
+                                <Avatar alt={displayName} src={photoURL} />
+                            </IconButton>
 
-                    <Grid item>
-                        <IconButton /*onClick={goToProfile}*/ sx={{ p: 0 }}>
-                            <Avatar alt={displayName} src={photoURL} />
-                        </IconButton>
-
-                        <IconButton 
-                            color='error'
-                            onClick={ onLogout }
-                        >
-                            <LogoutOutlined />
-                        </IconButton>
+                            <IconButton 
+                                color='error'
+                                onClick={onLogout}
+                            >
+                                <LogoutOutlined />
+                            </IconButton>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Toolbar>
-        </AppBar>
-    )
-}
+                </Toolbar>
+            </AppBar>
+
+            {/* Profile Dialog */}
+            <Dialog open={openDialog} onClose={closeProfileDialog}>
+                <DialogTitle>{displayName}</DialogTitle>
+                <DialogContent>
+                <Link to="/profile" style={{ color: 'inherit', textDecoration: 'none' }}>Ir a perfil</Link>
+
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeProfileDialog}>Cerrar</Button>
+                </DialogActions>
+            </Dialog>
+        </>
+    );
+};
+
+
+
