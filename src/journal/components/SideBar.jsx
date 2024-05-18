@@ -5,11 +5,14 @@ import { useSelector } from 'react-redux';
 import { SideBarItem } from './';
 
 export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) => {
-    const { displayName } = useSelector(state => state.auth);
+    const { displayName, uid: userUid } = useSelector(state => state.auth);
     const { notes } = useSelector(state => state.journal);
 
+    // Filtrar las notas para incluir solo las del usuario logueado
+    const userNotes = notes.filter(note => note.uid === userUid);
+
     // Ordenar las notas por fecha en orden descendente
-    const sortedNotes = [...notes].sort((a, b) => new Date(b.date) - new Date(a.date));
+    const sortedNotes = [...userNotes].sort((a, b) => new Date(b.date) - new Date(a.date));
 
     const drawer = (
         <>

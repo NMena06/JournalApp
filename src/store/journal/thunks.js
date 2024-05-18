@@ -5,92 +5,177 @@ import { deleteNoteById, savingNewNote, setNotes, setPhotosToActiveNote, setSavi
 import { fileUpload, loadNotes } from '../../helpers';
 
 
+// export const startNewNote = () => {
+//     return async( dispatch, getState ) => {
+
+//         dispatch( savingNewNote() );
+
+//         const { uid } = getState().auth;
+
+//         const newNote = {
+//             title: '',
+//             body: '',
+//             imageUrls: [],
+//             date: new Date().getTime(),
+//         }
+
+//         const newDoc = doc( collection( FirebaseDB, `${ uid }/journal/notes`) );
+//         await setDoc( newDoc, newNote );
+
+//         newNote.id = newDoc.id;  
+
+//         //! dispatch
+//         dispatch( addNewEmptyNote( newNote ) );
+//         dispatch( setActiveNote( newNote ) );
+
+//     }
+// }
+
 export const startNewNote = () => {
-    return async( dispatch, getState ) => {
+    return async (dispatch, getState) => {
+        dispatch(savingNewNote());
 
-        dispatch( savingNewNote() );
-
-        const { uid } = getState().auth;
+        const { uid, displayName, photoURL } = getState().auth;
 
         const newNote = {
+            uid,
             title: '',
             body: '',
             imageUrls: [],
             date: new Date().getTime(),
-        }
+            creatorDisplayName: displayName,
+            creatorPhotoURL: photoURL
+        };
 
-        const newDoc = doc( collection( FirebaseDB, `${ uid }/journal/notes`) );
-        await setDoc( newDoc, newNote );
+        const newDoc = doc(collection(FirebaseDB, 'notes'));
+        await setDoc(newDoc, newNote);
 
-        newNote.id = newDoc.id;  
+        newNote.id = newDoc.id;
 
-        //! dispatch
-        dispatch( addNewEmptyNote( newNote ) );
-        dispatch( setActiveNote( newNote ) );
+        dispatch(addNewEmptyNote(newNote));
+        dispatch(setActiveNote(newNote));
+    };
+};
 
-    }
-}
-
-
-export const startLoadingNotes = () => {
-    return async( dispatch, getState ) => {
+// export const startLoadingNotes = () => {
+//     return async( dispatch, getState ) => {
         
-        const { uid } = getState().auth;
-        if ( !uid ) throw new Error('El UID del usuario no existe');
+//         const { uid } = getState().auth;
+//         if ( !uid ) throw new Error('El UID del usuario no existe');
 
-        const notes = await loadNotes( uid );
-        dispatch( setNotes( notes ) );
-    }
-}
+//         const notes = await loadNotes( uid );
+//         dispatch( setNotes( notes ) );
+//     }
+// }
+export const startLoadingNotes = () => {
+    return async (dispatch) => {
+        const notes = await loadNotes();
+        dispatch(setNotes(notes));
+    };
+ };
+// export const startSaveNote = () => {
+//     return async( dispatch, getState ) => {
+
+//         dispatch( setSaving() );
+
+//         const { uid } = getState().auth;
+//         const { active:note } = getState().journal;
+
+//         const noteToFireStore = { ...note };
+//         delete noteToFireStore.id;
+    
+//         const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }` );
+//         await setDoc( docRef, noteToFireStore, { merge: true });
+
+//         dispatch( updateNote( note ) );
+
+//     }
+// }
 
 export const startSaveNote = () => {
-    return async( dispatch, getState ) => {
+    return async (dispatch, getState) => {
+        dispatch(setSaving());
 
-        dispatch( setSaving() );
-
-        const { uid } = getState().auth;
-        const { active:note } = getState().journal;
-
-        const noteToFireStore = { ...note };
-        delete noteToFireStore.id;
-    
-        const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }` );
-        await setDoc( docRef, noteToFireStore, { merge: true });
-
-        dispatch( updateNote( note ) );
-
-    }
-}
-
-
-export const startUploadingFiles = ( files = [] ) => {
-    return async( dispatch ) => {
-        dispatch( setSaving() );
-            
-        // await fileUpload( files[0] );
-        const fileUploadPromises = [];
-        for ( const file of files ) {
-            fileUploadPromises.push( fileUpload( file ) )
-        }
-
-        const photosUrls = await Promise.all( fileUploadPromises );
-        
-        dispatch( setPhotosToActiveNote( photosUrls ));
-        
-    }
-}
-
-
-export const startDeletingNote = () => {
-    return async( dispatch, getState) => {
-
-        const { uid } = getState().auth;
+        const { uid, displayName, photoURL } = getState().auth;
         const { active: note } = getState().journal;
 
-        const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }`);
-        await deleteDoc( docRef );
+        const noteToFireStore = {
+            ...note,
+            creatorDisplayName: displayName,
+            creatorPhotoURL: photoURL
+        };
+        delete noteToFireStore.id;
 
-        dispatch( deleteNoteById(note.id) );
+        const docRef = doc(FirebaseDB, `notes/${note.id}`);
+        await setDoc(docRef, noteToFireStore, { merge: true });
 
-    }
+        dispatch(updateNote(note));
+    };
+};
+
+// export const startUploadingFiles = ( files = [] ) => {
+//     return async( dispatch ) => {
+//         dispatch( setSaving() );
+            
+//         // await fileUpload( files[0] );
+//         const fileUploadPromises = [];
+//         for ( const file of files ) {
+//             fileUploadPromises.push( fileUpload( file ) )
+//         }
+
+//         const photosUrls = await Promise.all( fileUploadPromises );
+        
+//         dispatch( setPhotosToActiveNote( photosUrls ));
+        
+//     }
+// }
+export const startUploadingFiles = (files = []) => {
+    return async (dispatch) => {
+        dispatch(setSaving());
+
+        const fileArray = Array.from(files);
+        const fileUploadPromises = fileArray.map(file => fileUpload(file));
+        const photosUrls = await Promise.all(fileUploadPromises);
+
+        dispatch(setPhotosToActiveNote(photosUrls));
+    };
+};
+
+
+// export const startDeletingNote = () => {
+//     return async( dispatch, getState) => {
+
+//         const { uid } = getState().auth;
+//         const { active: note } = getState().journal;
+
+//         const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }`);
+//         await deleteDoc( docRef );
+
+//         dispatch( deleteNoteById(note.id) );
+
+//     }
+// }
+export const startDeletingNote = () => {
+    return async (dispatch, getState) => {
+        const { active: note } = getState().journal;
+
+        const docRef = doc(FirebaseDB, `notes/${note.id}`);
+        await deleteDoc(docRef);
+
+        dispatch(deleteNoteById(note.id));
+    };
+};
+
+export const  addCommentToNote = (state, action) => {
+    const { noteId, comment } = action.payload;
+
+    state.notes = state.notes.map(note => {
+        if (note.id === noteId) {
+            return {
+                ...note,
+                comments: [...note.comments, comment]
+            };
+        }
+        return note;
+    });
 }

@@ -1,0 +1,22 @@
+{
+  "notes": {
+    "note1": {
+      "uid": "user1",
+      "title": "First Note",
+      "body": "This is the first note.",
+      "imageUrls": [],
+      "date": 1625247600000,
+      "name": "ANTONELA",
+      "profileUrl": 1625247600000
+    },
+    "note2": {
+      "uid": "user2",
+      "title": "Second Note",
+      "body": "This is the second note.",
+      "imageUrls": [],
+      "date": 1625334000000,
+      "name": "NICOLAS",
+      "profileUrl": 1625247600000
+    }
+  }
+}
