@@ -10,7 +10,7 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { photoURL, displayName } = useSelector(state => state.auth);
-    
+
     const [openDialog, setOpenDialog] = useState(false);
 
     const openProfileDialog = () => {
@@ -27,11 +27,11 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
 
     return (
         <>
-            <AppBar 
+            <AppBar
                 position='fixed'
-                sx={{ 
-                    width: { sm: `calc(100% - ${ drawerWidth }px)` },
-                    ml: { sm: `${ drawerWidth }px` }
+                sx={{
+                    width: { sm: `calc(100% - ${drawerWidth}px)` },
+                    ml: { sm: `${drawerWidth}px` }
                 }}
             >
                 <Toolbar>
@@ -50,18 +50,24 @@ export const NavBar = ({ drawerWidth = 240, handleDrawerToggle }) => {
                                 <img src={cherryLogo} alt="Cherry Logo" style={{ height: 40, marginRight: 10 }} />
                             </Link>
                         </Grid>
+
                         
                         <Grid item>
+           
+
                             <IconButton sx={{ p: 0 }} onClick={openProfileDialog}>
+                            <Grid item>
+                            <Typography sx={{color:'white', marginRight:'2px'}} >{displayName}</Typography>
+                            </Grid>
                                 <Avatar alt={displayName} src={photoURL} />
                             </IconButton>
-
+                            {/* 
                             <IconButton 
                                 color='error'
                                 onClick={onLogout}
                             >
                                 <LogoutOutlined />
-                            </IconButton>
+                            </IconButton> */}
                         </Grid>
                     </Grid>
                 </Toolbar>

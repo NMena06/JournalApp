@@ -15,7 +15,7 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
         <>
             <Toolbar>
                 <Typography variant='h6' noWrap component='div'>
-                    {displayName}
+                    Mis entradas
                 </Typography>
             </Toolbar>
             <Divider />
