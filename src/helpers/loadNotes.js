@@ -8,7 +8,8 @@ export const loadNotes = async () => {
 
     for (const doc of snapshot.docs) {
         const noteData = doc.data();
-        const commentsSnapshot = await getDocs(collection(doc.ref, 'comments'));
+        const commentsRef = collection(doc.ref, 'comments');
+        const commentsSnapshot = await getDocs(commentsRef);
 
         const comments = [];
         commentsSnapshot.forEach(commentDoc => {
