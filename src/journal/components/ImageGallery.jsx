@@ -15,13 +15,13 @@ export const ImageGallery = ({ images }) => {
     >
       <ImageList sx={{ width: '100%', height: 'auto' }} cols={numCols} rowHeight={'auto'}>
         {images.map((image) => (
-          <ImageListItem key={image} sx={{ height: 250 }}>
+          <ImageListItem key={image} sx={{ height: 'auto', width: '100%', display: 'flex', justifyContent: 'center' }}>
             <img
               src={`${image}?w=164&h=164&fit=crop&auto=format`}
               srcSet={`${image}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
               alt="Imagen de la nota"
               loading="lazy"
-              style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+              style={{ maxHeight: '100%', maxWidth: '100%', objectFit: 'contain' }}
             />
           </ImageListItem>
         ))}
