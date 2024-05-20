@@ -1,35 +1,8 @@
-import { collection, deleteDoc, doc, setDoc } from 'firebase/firestore/lite';
+import { collection, deleteDoc, doc, setDoc, addDoc, getDoc } from 'firebase/firestore/lite';
 import { FirebaseDB } from '../../firebase/config';
-import { addNewEmptyNote, setActiveNote } from './';
-import { deleteNoteById, savingNewNote, setNotes, setPhotosToActiveNote, setSaving, updateNote } from './journalSlice';
+import { addNewEmptyNote, setActiveNote, updateNote } from './';
+import { deleteNoteById, savingNewNote, setNotes, setPhotosToActiveNote, setSaving } from './journalSlice';
 import { fileUpload, loadNotes } from '../../helpers';
-
-
-// export const startNewNote = () => {
-//     return async( dispatch, getState ) => {
-
-//         dispatch( savingNewNote() );
-
-//         const { uid } = getState().auth;
-
-//         const newNote = {
-//             title: '',
-//             body: '',
-//             imageUrls: [],
-//             date: new Date().getTime(),
-//         }
-
-//         const newDoc = doc( collection( FirebaseDB, `${ uid }/journal/notes`) );
-//         await setDoc( newDoc, newNote );
-
-//         newNote.id = newDoc.id;  
-
-//         //! dispatch
-//         dispatch( addNewEmptyNote( newNote ) );
-//         dispatch( setActiveNote( newNote ) );
-
-//     }
-// }
 
 export const startNewNote = () => {
     return async (dispatch, getState) => {
@@ -42,6 +15,7 @@ export const startNewNote = () => {
             title: '',
             body: '',
             imageUrls: [],
+            comments: [],
             date: new Date().getTime(),
             creatorDisplayName: displayName,
             creatorPhotoURL: photoURL
@@ -57,41 +31,39 @@ export const startNewNote = () => {
     };
 };
 
-// export const startLoadingNotes = () => {
-//     return async( dispatch, getState ) => {
-        
-//         const { uid } = getState().auth;
-//         if ( !uid ) throw new Error('El UID del usuario no existe');
-
-//         const notes = await loadNotes( uid );
-//         dispatch( setNotes( notes ) );
-//     }
-// }
 export const startLoadingNotes = () => {
     return async (dispatch) => {
         const notes = await loadNotes();
         dispatch(setNotes(notes));
     };
- };
-// export const startSaveNote = () => {
-//     return async( dispatch, getState ) => {
+};
 
-//         dispatch( setSaving() );
+export const startSaveComment = (noteId, commentBody) => {
+    return async (dispatch, getState) => {
+        try {
+            const { displayName, photoURL } = getState().auth;
+            const newComment = {
+                body: commentBody,
+                commentDisplayName: displayName,
+                commentPhotoURL: photoURL,
+                date: new Date().getTime(),
+            };
 
-//         const { uid } = getState().auth;
-//         const { active:note } = getState().journal;
+            const noteDocRef = doc(FirebaseDB, 'notes', noteId);
+            const commentCollectionRef = collection(noteDocRef, 'comments');
 
-//         const noteToFireStore = { ...note };
-//         delete noteToFireStore.id;
-    
-//         const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }` );
-//         await setDoc( docRef, noteToFireStore, { merge: true });
+            await addDoc(commentCollectionRef, newComment);
 
-//         dispatch( updateNote( note ) );
+            // Obtener la nota actualizada después de añadir el comentario
+            const noteSnapshot = await getDoc(noteDocRef);
+            const updatedNote = { id: noteId, ...noteSnapshot.data() };
 
-//     }
-// }
-
+            dispatch(updateNote(updatedNote));
+        } catch (error) {
+            console.error('Error al guardar el comentario:', error);
+        }
+    };
+};
 export const startSaveNote = () => {
     return async (dispatch, getState) => {
         dispatch(setSaving());
@@ -113,22 +85,6 @@ export const startSaveNote = () => {
     };
 };
 
-// export const startUploadingFiles = ( files = [] ) => {
-//     return async( dispatch ) => {
-//         dispatch( setSaving() );
-            
-//         // await fileUpload( files[0] );
-//         const fileUploadPromises = [];
-//         for ( const file of files ) {
-//             fileUploadPromises.push( fileUpload( file ) )
-//         }
-
-//         const photosUrls = await Promise.all( fileUploadPromises );
-        
-//         dispatch( setPhotosToActiveNote( photosUrls ));
-        
-//     }
-// }
 export const startUploadingFiles = (files = []) => {
     return async (dispatch) => {
         dispatch(setSaving());
@@ -141,20 +97,6 @@ export const startUploadingFiles = (files = []) => {
     };
 };
 
-
-// export const startDeletingNote = () => {
-//     return async( dispatch, getState) => {
-
-//         const { uid } = getState().auth;
-//         const { active: note } = getState().journal;
-
-//         const docRef = doc( FirebaseDB, `${ uid }/journal/notes/${ note.id }`);
-//         await deleteDoc( docRef );
-
-//         dispatch( deleteNoteById(note.id) );
-
-//     }
-// }
 export const startDeletingNote = () => {
     return async (dispatch, getState) => {
         const { active: note } = getState().journal;
@@ -166,7 +108,7 @@ export const startDeletingNote = () => {
     };
 };
 
-export const  addCommentToNote = (state, action) => {
+export const addCommentToNote = (state, action) => {
     const { noteId, comment } = action.payload;
 
     state.notes = state.notes.map(note => {
@@ -178,9 +120,9 @@ export const  addCommentToNote = (state, action) => {
         }
         return note;
     });
-}
+};
+
 export const updateProfilePhoto = async (userId, photoURL) => {
     const userDocRef = doc(FirebaseDB, 'users', userId);
     await updateDoc(userDocRef, { photoURL });
 };
-

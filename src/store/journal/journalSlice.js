@@ -50,7 +50,7 @@ export const journalSlice = createSlice({
         },
         addCommentToNote: (state, action) => {
             const { noteId, comment } = action.payload;
-
+        
             state.notes = state.notes.map(note => {
                 if (note.id === noteId) {
                     return {
@@ -61,6 +61,7 @@ export const journalSlice = createSlice({
                 return note;
             });
         },
+        
     },
 });
 

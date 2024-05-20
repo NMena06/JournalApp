@@ -1,33 +1,31 @@
-import { collection, getDocs } from 'firebase/firestore/lite';
+import { collection, getDocs, query, where } from 'firebase/firestore/lite';
 import { FirebaseDB } from '../firebase/config';
 
 export const loadNotes = async () => {
-    const collectionRef = collection(FirebaseDB, 'notes');
-    const docs = await getDocs(collectionRef);
-
+    const notesRef = collection(FirebaseDB, 'notes');
+    const snapshot = await getDocs(notesRef);
     const notes = [];
-    docs.forEach(doc => {
-        notes.push({ id: doc.id, ...doc.data() });
-    });
+
+    for (const doc of snapshot.docs) {
+        const noteData = doc.data();
+        const commentsSnapshot = await getDocs(collection(doc.ref, 'comments'));
+
+        const comments = [];
+        commentsSnapshot.forEach(commentDoc => {
+            comments.push({
+                id: commentDoc.id,
+                ...commentDoc.data()
+            });
+        });
+
+        const note = {
+            id: doc.id,
+            ...noteData,
+            comments: comments
+        };
+
+        notes.push(note);
+    }
 
     return notes;
 };
-
-
-// import { collection, getDocs } from 'firebase/firestore/lite';
-// import { FirebaseDB } from '../firebase/config';
-
-
-// export const loadNotes = async( uid = '') => {
-//     if ( !uid ) throw new Error('El UID del usuario no existe');
-
-//     const collectionRef = collection( FirebaseDB, `${ uid }/journal/notes` );
-//     const docs = await getDocs(collectionRef);
-
-//     const notes = [];
-//     docs.forEach( doc => {
-//         notes.push({ id: doc.id, ...doc.data() });
-//     });
-    
-//     return notes;
-// }
