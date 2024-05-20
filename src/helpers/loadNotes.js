@@ -1,4 +1,4 @@
-import { collection, getDocs, query, where, getDoc } from 'firebase/firestore/lite';
+import { collection, getDocs } from 'firebase/firestore/lite';
 import { FirebaseDB } from '../firebase/config';
 
 export const loadNotes = async () => {
@@ -6,27 +6,29 @@ export const loadNotes = async () => {
     const snapshot = await getDocs(notesRef);
     const notes = [];
 
-    for (const doc of snapshot.docs) {
+    snapshot.forEach(doc => {
         const noteData = doc.data();
-        const note = {
+        notes.push({
             id: doc.id,
             ...noteData,
             comments: [] // Inicializamos la lista de comentarios
-        };
-
-        // Consultamos los comentarios de la nota actual
-        const commentsRef = collection(doc.ref, 'comments');
-        const commentsSnapshot = await getDocs(commentsRef);
-
-        commentsSnapshot.forEach(commentDoc => {
-            note.comments.push({
-                id: commentDoc.id,
-                ...commentDoc.data()
-            });
         });
-
-        notes.push(note);
-    }
+    });
 
     return notes;
+};
+
+export const loadComments = async (noteId) => {
+    const noteRef = collection(FirebaseDB, `notes/${noteId}/comments`);
+    const commentsSnapshot = await getDocs(noteRef);
+    const comments = [];
+
+    commentsSnapshot.forEach(commentDoc => {
+        comments.push({
+            id: commentDoc.id,
+            ...commentDoc.data()
+        });
+    });
+
+    return comments;
 };

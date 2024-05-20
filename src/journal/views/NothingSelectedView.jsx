@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Grid, Typography, TextField, Avatar, Button } from '@mui/material';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2'; // Importa SweetAlert
 
 import { ImageGallery } from '../components';
 import { StarOutline } from '@mui/icons-material';
-import { loadNotes } from '../../helpers';
+import { loadNotes, loadComments } from '../../helpers';
 import { startSaveComment } from '../../store/journal';
 
 export const NothingSelectedView = () => {
@@ -19,6 +19,14 @@ export const NothingSelectedView = () => {
       const fetchNotes = async () => {
           const notesData = await loadNotes();
           setNotes(notesData);
+
+          // Cargar comentarios para cada nota de forma asíncrona
+          notesData.forEach(async (note) => {
+              const comments = await loadComments(note.id);
+              setNotes(prevNotes => prevNotes.map(n => 
+                  n.id === note.id ? { ...n, comments: comments } : n
+              ));
+          });
       };
 
       fetchNotes();
