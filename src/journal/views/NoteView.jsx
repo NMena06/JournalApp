@@ -128,7 +128,7 @@ export const NoteView = () => {
           variant="filled"
           fullWidth
           multiline
-          placeholder="Agrega un comentario"
+          placeholder="Cuerpo de publicación"
           minRows={4}
           name="body"
           value={body}
