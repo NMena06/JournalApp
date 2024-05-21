@@ -1,6 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
-
 import {
   DeleteOutline,
   SaveOutlined,
@@ -32,17 +31,11 @@ export const NoteView = () => {
 
   const dateString = useMemo(() => {
     const newDate = new Date(date);
-    // Obtener la hora local y restarle 3 horas para ajustarla a la hora de Argentina
     const adjustedDate = new Date(newDate.getTime() - 3 * 60 * 60 * 1000);
-    // Formatear la fecha como dd/mm/yyyy
     return format(adjustedDate, "dd/MM/yyyy HH:mm:ss");
   }, [date]);
 
   const fileInputRef = useRef();
-
-  useEffect(() => {
-    dispatch(setActiveNote(formState));
-  }, [formState]);
 
   useEffect(() => {
     if (messageSaved.length > 0) {
@@ -51,6 +44,7 @@ export const NoteView = () => {
   }, [messageSaved]);
 
   const onSaveNote = () => {
+    dispatch(setActiveNote(formState));
     dispatch(startSaveNote());
   };
 
@@ -76,12 +70,17 @@ export const NoteView = () => {
         <Typography fontSize={20} fontWeight="light">
           {dateString}
         </Typography>
+      </Grid>
+      
+      <Grid item>
         <IconButton
           color="primary"
           disabled={isSaving}
+          sx={{ padding: 2 }}
           onClick={() => fileInputRef.current.click()}
         >
-          <UploadOutlined />
+          <UploadOutlined sx={{ fontSize: 30, mr: 1 }}/>
+          Subir foto
         </IconButton>
 
         <Button
@@ -96,6 +95,7 @@ export const NoteView = () => {
       </Grid>
 
       {/* Image gallery */}
+      <ImageGallery images={note.imageUrls} />
 
       <Grid container>
         <TextField
@@ -111,7 +111,7 @@ export const NoteView = () => {
           onChange={onInputChange}
         />
       </Grid>
-      <ImageGallery images={note.imageUrls} />
+
       <Grid item>
         <input
           type="file"

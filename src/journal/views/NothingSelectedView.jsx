@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Grid, Typography, TextField, Avatar, Button } from '@mui/material';
+import { Grid, Typography, TextField, Avatar, Button, IconButton } from '@mui/material';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2'; // Importa SweetAlert
 
 import { ImageGallery } from '../components';
-import { StarOutline } from '@mui/icons-material';
+import { SendRounded, StarOutline } from '@mui/icons-material';
 import { loadNotes, loadComments } from '../../helpers';
 import { startSaveComment } from '../../store/journal';
 
@@ -108,6 +108,11 @@ export const NothingSelectedView = () => {
                                   </Typography>
                               </Grid>
                           </Grid>
+                          <Grid item sx={{ mt: 1 }}>
+                              <Typography fontSize={12} fontWeight="light">
+                                  {dateString}
+                              </Typography>
+                          </Grid>
 
                           <Grid item sx={{ mt: 1 }}>
                               <Typography variant='h5' fontWeight="light" >
@@ -117,11 +122,7 @@ export const NothingSelectedView = () => {
 
                           <ImageGallery images={imageUrls} />
 
-                          <Grid item sx={{ mt: 1 }}>
-                              <Typography fontSize={12} fontWeight="light">
-                                  {dateString}
-                              </Typography>
-                          </Grid>
+
 
                           <Grid item sx={{ mt: 1 }}>
                               <Typography fontSize={14} fontWeight="light">
@@ -129,10 +130,28 @@ export const NothingSelectedView = () => {
                               </Typography>
                           </Grid>
 
-                          <Grid item sx={{ mt: 2, width: '100%' }}>
+
+                          {comments && comments.length > 0 && (
+                              <Grid item sx={{ mt: 2, width: '100%' }}>
+                                  <Typography fontSize={14} fontWeight="medium">Comentarios:</Typography>
+                                  {comments.map((comment, index) => (
+                                      <Grid key={index} container direction="row" sx={{ mt: 1, alignItems: 'center' }}>
+                                          <Avatar alt={comment.commentDisplayName} src={comment.commentPhotoURL} sx={{ mr: 2 }} />
+                                          <Typography variant='body2' fontWeight="bold" sx={{ mr: 1 }}>
+                                              {comment.commentDisplayName}
+                                          </Typography>
+                                          <Typography variant='body2'>
+                                              {comment.body}
+                                          </Typography>
+                                      </Grid>
+                                  ))}
+                              </Grid>
+                          )}
+                          
+                          <Grid item sx={{ mt: 2, width: '100%', display: 'flex', alignItems: 'center' }}>
                               <TextField
                                   type="text"
-                                  variant="filled"
+                                  variant="standard"
                                   fullWidth
                                   multiline
                                   placeholder="Agrega un comentario"
@@ -140,25 +159,10 @@ export const NothingSelectedView = () => {
                                   value={comment}
                                   onChange={(e) => setComment(e.target.value)}
                               />
+                              <IconButton color="primary" onClick={() => handleSaveComment(id)}>
+                                  <SendRounded />
+                              </IconButton>
                           </Grid>
-
-                          <Grid item sx={{ mt: 1 }}>
-                              <Button onClick={() => handleSaveComment(id)}>Enviar Comentario</Button>
-                          </Grid>
-
-                          {comments && comments.length > 0 && (
-                              <Grid item sx={{ mt: 2, width: '100%' }}>
-                                  <Typography variant='h6'>Comentarios:</Typography>
-                                  {comments.map((comment, index) => (
-                                      <Grid key={index} container direction="row" sx={{ mt: 1, alignItems: 'center' }}>
-                                          <Avatar alt={comment.commentDisplayName} src={comment.commentPhotoURL} sx={{ mr: 2 }} />
-                                          <Typography variant='body2' fontWeight="bold">{comment.commentDisplayName}</Typography>
-                                          
-                                          <Typography variant='body2'>  {comment.body}</Typography>
-                                      </Grid>
-                                  ))}
-                              </Grid>
-                          )}
                       </Grid>
                   );
               })
@@ -168,7 +172,7 @@ export const NothingSelectedView = () => {
                       <StarOutline sx={{ fontSize: 100, color: 'white' }} />
                   </Grid>
                   <Grid item xs={12}>
-                      <Typography color="white" variant='h5'>Selecciona o crea una nueva nota</Typography>
+                      <Typography color="white" variant='h5'>Cargando...</Typography>
                   </Grid>
               </>
           )}
