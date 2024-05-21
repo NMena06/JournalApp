@@ -5,7 +5,7 @@ import { format } from 'date-fns';
 import Swal from 'sweetalert2'; // Importa SweetAlert
 
 import { ImageGallery } from '../components';
-import { SendRounded, StarOutline } from '@mui/icons-material';
+import { CachedRounded, SendRounded, StarOutline } from '@mui/icons-material';
 import { loadNotes, loadComments } from '../../helpers';
 import { startSaveComment } from '../../store/journal';
 
@@ -168,8 +168,8 @@ export const NothingSelectedView = () => {
               })
           ) : (
               <>
-                  <Grid item xs={12}>
-                      <StarOutline sx={{ fontSize: 100, color: 'white' }} />
+                  <Grid item xs={10}>
+                      <CachedRounded sx={{ fontSize: 100, color: 'white' }} />
                   </Grid>
                   <Grid item xs={12}>
                       <Typography color="white" variant='h5'>Cargando...</Typography>

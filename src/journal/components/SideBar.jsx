@@ -1,8 +1,6 @@
-import { useState } from 'react';
-import { Box, Divider, Drawer, IconButton, List, Toolbar, Typography } from '@mui/material';
-import { Menu as MenuIcon } from '@mui/icons-material';
+import { Box, Divider, Drawer, List, Toolbar, Typography } from '@mui/material';
 import { useSelector } from 'react-redux';
-import { SideBarItem } from './';
+import { SideBarItem } from './SideBarItem';
 
 export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) => {
     const { displayName, uid: userUid } = useSelector(state => state.auth);
@@ -16,13 +14,13 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
 
     const drawer = (
         <>
-            <Toolbar>
+            <Toolbar sx={{ backgroundColor: '#262255', color: '#fff', borderBottom: '1px solid #ccc' }}>
                 <Typography variant='h6' noWrap component='div'>
                     Mis entradas
                 </Typography>
             </Toolbar>
             <Divider />
-            <List>
+            <List sx={{ overflow: 'auto' }}>
                 {sortedNotes.map(note => (
                     <SideBarItem key={note.id} {...note} />
                 ))}
@@ -37,7 +35,7 @@ export const SideBar = ({ drawerWidth = 240, mobileOpen, handleDrawerToggle }) =
                 open={mobileOpen}
                 onClose={handleDrawerToggle}
                 ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
+                    keepMounted: true, // Mejora la apertura en dispositivos móviles.
                 }}
                 sx={{
                     display: { xs: 'block', sm: 'none' },

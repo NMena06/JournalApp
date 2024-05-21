@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useDispatch } from 'react-redux';
-import { Grid, ListItem, ListItemButton, ListItemIcon, ListItemText, Typography } from '@mui/material';
+import { ListItem, ListItemButton, ListItemIcon, ListItemText, Typography, Grid, Paper, Avatar } from '@mui/material';
 import { TurnedInNot } from '@mui/icons-material';
 import { setActiveNote } from '../../store/journal';
 
-export const SideBarItem = ({ title = '', body, id, date, imageUrls = [] }) => {
+export const SideBarItem = ({ title = '', body, id, date, imageUrls = [], creatorDisplayName, creatorPhotoURL }) => {
     const dispatch = useDispatch();
 
     const onClickNote = () => {
@@ -25,22 +25,19 @@ export const SideBarItem = ({ title = '', body, id, date, imageUrls = [] }) => {
 
     return (
         <ListItem disablePadding>
-            <ListItemButton onClick={onClickNote} sx={{ py: 2 }}>
-                <ListItemIcon>
-                    <TurnedInNot />
-                </ListItemIcon>
-                <Grid container alignItems="center" justifyContent="space-between">
-                    <Grid item xs={9} md={10}>
-                        <ListItemText
-                            primary={<Typography variant="subtitle1">{newTitle}</Typography>}
-                            secondary={<Typography variant="body2" color="text.secondary">{formattedDate}</Typography>}
-                        />
+            <Paper elevation={3} sx={{ width: '100%', borderRadius: 3, cursor: 'pointer', '&:hover': { backgroundColor: '#f5f5f5' } }}>
+                <ListItemButton onClick={onClickNote} sx={{ py: 2 }}>
+                    <Grid container alignItems="center">
+
+                        <Grid item xs={10}>
+                            <ListItemText
+                                primary={<Typography variant="subtitle1" noWrap>{newTitle}</Typography>}
+                                secondary={<Typography variant="body2" color="text.secondary">{formattedDate}</Typography>}
+                            />
+                        </Grid>
                     </Grid>
-                    {/* <Grid item xs={3} md={2} textAlign="right">
-                        <Typography variant="caption">{body}</Typography>
-                    </Grid> */}
-                </Grid>
-            </ListItemButton>
+                </ListItemButton>
+            </Paper>
         </ListItem>
     );
 };
